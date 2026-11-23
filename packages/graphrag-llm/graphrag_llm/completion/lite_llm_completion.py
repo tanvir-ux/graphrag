@@ -259,7 +259,10 @@ def _create_base_completions(
         if model_config.mock_responses and mock_response is not None:
             new_args["mock_response"] = mock_response
 
-        if json_object and "response_format" not in new_args:
+        # completion() always forwards response_format, using None when the
+        # caller omitted it. Treat that explicit None as unset so
+        # response_format_json_object=True still enables JSON mode.
+        if json_object and new_args.get("response_format") is None:
             new_args["response_format"] = {"type": "json_object"}
 
         response = litellm.completion(
@@ -285,7 +288,10 @@ def _create_base_completions(
         if model_config.mock_responses and mock_response is not None:
             new_args["mock_response"] = mock_response
 
-        if json_object and "response_format" not in new_args:
+        # completion_async() always forwards response_format, using None when
+        # the caller omitted it. Treat that explicit None as unset so
+        # response_format_json_object=True still enables JSON mode.
+        if json_object and new_args.get("response_format") is None:
             new_args["response_format"] = {"type": "json_object"}
 
         response = await litellm.acompletion(

@@ -1,0 +1,4 @@
+{
+  "type": "patch",
+  "description": "Send JSON object mode when response_format_json_object is requested."
+}
